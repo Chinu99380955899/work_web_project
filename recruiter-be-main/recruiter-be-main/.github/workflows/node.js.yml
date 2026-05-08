@@ -1,0 +1,37 @@
+# Node.js CI/CD Workflow
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: |
+        mkdir -p dist # Ensure 'dist' directory exists
+        echo "${{ secrets.RECRUITER_ENV_FILE }}" | sed 's/\\n/\n/g' > dist/.env
+    - name: delete Application with PM2
+      run: |
+        pm2 delete RECRUITER || true
+    - name: start Application with PM2
+      run: |
+        cd dist
+        pm2 start index.js --name RECRUITER
