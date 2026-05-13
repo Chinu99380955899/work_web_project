@@ -98,8 +98,12 @@ export interface ICandidate extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
-declare const _default: mongoose.Model<ICandidate, {}, {}, {}, mongoose.Document<unknown, {}, ICandidate> & ICandidate & {
+declare const _default: mongoose.Model<ICandidate, {}, {}, {}, mongoose.Document<unknown, {}, ICandidate, {}, mongoose.DefaultSchemaOptions> & ICandidate & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, ICandidate>;
 export default _default;
 //# sourceMappingURL=Candidate.d.ts.map

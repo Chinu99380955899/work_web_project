@@ -51,7 +51,7 @@ export interface RequirementFormData {
    createdBy?: string; 
   }
 
- const baseApi = "http://localhost:4000/api";
+   const baseApi = "http://localhost:4000/api";
 // const baseApi = "https://vizlogiccloud.com/recruiter/api";
 
 // Create axios instance
@@ -321,6 +321,12 @@ export const jobApplicationApi = {
   },
 
   
+};
+
+export const excelApi = {
+  uploadExcel: (formData: FormData) => api.post("/excel/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  }),
 };
 
 

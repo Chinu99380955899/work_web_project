@@ -14,8 +14,12 @@ export interface ISalesFunnel extends Document {
     projectedRevenue: number;
     createdBy: string;
 }
-declare const _default: mongoose.Model<ISalesFunnel, {}, {}, {}, mongoose.Document<unknown, {}, ISalesFunnel> & ISalesFunnel & {
+declare const _default: mongoose.Model<ISalesFunnel, {}, {}, {}, mongoose.Document<unknown, {}, ISalesFunnel, {}, mongoose.DefaultSchemaOptions> & ISalesFunnel & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, ISalesFunnel>;
 export default _default;
 //# sourceMappingURL=Salesfunnel.d.ts.map

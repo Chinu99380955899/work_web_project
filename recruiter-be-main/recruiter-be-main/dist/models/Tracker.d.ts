@@ -18,8 +18,12 @@ export interface ITracker extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
-declare const _default: mongoose.Model<ITracker, {}, {}, {}, mongoose.Document<unknown, {}, ITracker> & ITracker & {
+declare const _default: mongoose.Model<ITracker, {}, {}, {}, mongoose.Document<unknown, {}, ITracker, {}, mongoose.DefaultSchemaOptions> & ITracker & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, ITracker>;
 export default _default;
 //# sourceMappingURL=Tracker.d.ts.map

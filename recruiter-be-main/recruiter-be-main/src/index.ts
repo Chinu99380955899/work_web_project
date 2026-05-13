@@ -17,7 +17,10 @@ import trackerRoutes from "./routes/tracker";
 import funnel from './routes/funnel'
 import jobRoutes from "./routes/jobs";
 import Salesfunnel from "./routes/salesfunnelRoutes";
+
+
 import jobApplicationRoutes from "./routes/jobApplicationRoutes";
+import excelRoutes from "./routes/excelRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -76,6 +79,7 @@ app.use("/api/sales-funnel", Salesfunnel);
 
 
 app.use("/api/job-applications", jobApplicationRoutes);
+app.use("/api/excel", excelRoutes);
 
 
 

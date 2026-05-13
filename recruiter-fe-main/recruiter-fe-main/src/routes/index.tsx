@@ -22,6 +22,7 @@ import Job from "@/pages/candidate/Job";
 import JobPost from "@/pages/recruiter/JobPost";
 import SalesFunnel from "@/components/recruiter/salesfunnel/SalesFunnel";
 
+
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -86,6 +87,7 @@ export const AppRoutes: React.FC = () => {
 
       {/* Catch all other routes */}
       <Route path="*" element={<Navigate to="/login" replace />} />
+
 
     </Routes>
   );

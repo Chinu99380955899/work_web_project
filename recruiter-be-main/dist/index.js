@@ -22,6 +22,10 @@ const funnel_1 = __importDefault(require("./routes/funnel"));
 const jobs_1 = __importDefault(require("./routes/jobs"));
 const salesfunnelRoutes_1 = __importDefault(require("./routes/salesfunnelRoutes"));
 const jobApplicationRoutes_1 = __importDefault(require("./routes/jobApplicationRoutes"));
+
+const resumeActions = require('./routes/resumeActions');
+
+
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 4000;
@@ -79,6 +83,8 @@ const startServer = async () => {
         process.exit(1);
     }
 };
+
+app.use('/api/actions', resumeActions);
 process.on("unhandledRejection", (err) => {
     console.error("❌ Unhandled Promise Rejection:", err);
     process.exit(1);

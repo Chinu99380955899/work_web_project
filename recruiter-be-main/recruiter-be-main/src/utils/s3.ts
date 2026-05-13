@@ -83,18 +83,20 @@ export const getSignedUrl = async (
     // Extract key from URL - handle different URL formats
     let key: string;
 
-    if (decodedUrl.includes(`${BUCKET_NAME}/`)) {
-      // Format: https://bucket-name.s3.region.amazonaws.com/folder/file.pdf
-      key = decodedUrl.split(`${BUCKET_NAME}/`)[1];
-    } else if (decodedUrl.includes("s3.amazonaws.com/")) {
-      // Format: https://s3.amazonaws.com/bucket-name/folder/file.pdf
-      key = decodedUrl.split("s3.amazonaws.com/")[1].split("/").slice(1).join("/");
-    } else if (decodedUrl.includes("s3.") && decodedUrl.includes(".amazonaws.com/")) {
-      // Format: https://s3.region.amazonaws.com/bucket-name/folder/file.pdf
-      const urlParts = decodedUrl.split(".amazonaws.com/")[1];
-      key = urlParts.split("/").slice(1).join("/");
+    // Robust Key Extraction: Get everything after the domain name
+    if (decodedUrl.includes(".amazonaws.com/")) {
+      // Handles virtually all S3 URL formats by taking everything after the domain
+      const parts = decodedUrl.split(".amazonaws.com/");
+      let potentialKey = parts[1];
+
+      // If the bucket name is in the path (e.g., s3.region.amazonaws.com/bucket-name/key)
+      // we remove the bucket name part.
+      if (potentialKey.startsWith(`${BUCKET_NAME}/`)) {
+        key = potentialKey.replace(`${BUCKET_NAME}/`, "");
+      } else {
+        key = potentialKey;
+      }
     } else {
-      // If it's already just a key (no full URL)
       key = decodedUrl;
     }
 

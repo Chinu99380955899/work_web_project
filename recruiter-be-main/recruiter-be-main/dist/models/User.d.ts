@@ -12,8 +12,12 @@ export interface IUser extends Document {
     updatedAt: Date;
     comparePassword(password: string): Promise<boolean>;
 }
-declare const _default: mongoose.Model<IUser, {}, {}, {}, mongoose.Document<unknown, {}, IUser> & IUser & {
+declare const _default: mongoose.Model<IUser, {}, {}, {}, mongoose.Document<unknown, {}, IUser, {}, mongoose.DefaultSchemaOptions> & IUser & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, IUser>;
 export default _default;
 //# sourceMappingURL=User.d.ts.map

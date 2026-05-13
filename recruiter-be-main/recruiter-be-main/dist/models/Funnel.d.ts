@@ -20,8 +20,12 @@ export interface FunnelFormData extends Document {
     status: string;
     createdBy: string;
 }
-declare const _default: mongoose.Model<FunnelFormData, {}, {}, {}, mongoose.Document<unknown, {}, FunnelFormData> & FunnelFormData & {
+declare const _default: mongoose.Model<FunnelFormData, {}, {}, {}, mongoose.Document<unknown, {}, FunnelFormData, {}, mongoose.DefaultSchemaOptions> & FunnelFormData & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, FunnelFormData>;
 export default _default;
 //# sourceMappingURL=Funnel.d.ts.map

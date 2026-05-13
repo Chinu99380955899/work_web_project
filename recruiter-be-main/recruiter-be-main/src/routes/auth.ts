@@ -167,7 +167,7 @@ router.get(
       }
 
       if (user.phoneNumber == "+918595264114") {
-        user.role = "admin"; //admin, candidate, recruiter 
+        user.role = "recruiter"; //admin, candidate, recruiter 
         return res.json({
           success: true,
           user,

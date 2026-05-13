@@ -291,16 +291,22 @@ export const RecruiterDashboard: React.FC = () => {
                             />
                           </TableCell>
                           <TableCell align="right">
-                            <Button
-                              size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                navigate(`/candidate/profile/${candidate._id}`)
-                              }
-                            >
-                              View Profile
-                            </Button>
-                          </TableCell>
+  <Button
+    size="small"
+    variant="outlined"
+    onClick={() => {
+      // Check if the resume URL exists before trying to open it
+      if (candidate.resumeUrl) {
+        // This opens the PDF in a new tab using the browser's viewer
+        window.open(candidate.resumeUrl, '_blank');
+      } else {
+        alert("No resume URL found for this candidate.");
+      }
+    }}
+  >
+    View Resume
+  </Button>
+</TableCell>
                         </TableRow>
                       ))
                     ) : (

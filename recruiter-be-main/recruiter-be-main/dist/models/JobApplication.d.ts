@@ -1,58 +1,80 @@
 import mongoose from "mongoose";
 declare const _default: mongoose.Model<{
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-}, {}, {}, {}, mongoose.Document<unknown, {}, {
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
+} & mongoose.DefaultTimestampProps, {}, {}, {
+    id: string;
+}, mongoose.Document<unknown, {}, {
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-}> & {
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
+} & mongoose.DefaultTimestampProps, {
+    id: string;
+}, {
+    timestamps: true;
+}> & Omit<{
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-} & {
+} & mongoose.DefaultTimestampProps & {
     _id: mongoose.Types.ObjectId;
-}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, {
+} & {
+    __v: number;
+}, "id"> & {
+    id: string;
+}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, {
     timestamps: true;
 }, {
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-}, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
+} & mongoose.DefaultTimestampProps, mongoose.Document<unknown, {}, {
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-}>> & mongoose.FlatRecord<{
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
-} & {
+} & mongoose.DefaultTimestampProps, {
+    id: string;
+}, Omit<mongoose.DefaultSchemaOptions, "timestamps"> & {
+    timestamps: true;
+}> & Omit<{
     status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
-    appliedAt: Date;
+    appliedAt: NativeDate;
     candidateId: mongoose.Types.ObjectId;
     jobId: mongoose.Types.ObjectId;
-}> & {
+} & mongoose.DefaultTimestampProps & {
     _id: mongoose.Types.ObjectId;
-}>>;
+} & {
+    __v: number;
+}, "id"> & {
+    id: string;
+}, unknown, {
+    status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
+    appliedAt: NativeDate;
+    candidateId: mongoose.Types.ObjectId;
+    jobId: mongoose.Types.ObjectId;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>, {
+    status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
+    appliedAt: NativeDate;
+    candidateId: mongoose.Types.ObjectId;
+    jobId: mongoose.Types.ObjectId;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>;
 export default _default;
 //# sourceMappingURL=JobApplication.d.ts.map

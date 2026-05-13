@@ -16,8 +16,12 @@ export interface IJob extends Document {
         appliedAt: Date;
     }[];
 }
-declare const _default: mongoose.Model<IJob, {}, {}, {}, mongoose.Document<unknown, {}, IJob> & IJob & {
+declare const _default: mongoose.Model<IJob, {}, {}, {}, mongoose.Document<unknown, {}, IJob, {}, mongoose.DefaultSchemaOptions> & IJob & Required<{
     _id: mongoose.Types.ObjectId;
-}, any>;
+}> & {
+    __v: number;
+} & {
+    id: string;
+}, any, IJob>;
 export default _default;
 //# sourceMappingURL=Job.d.ts.map
