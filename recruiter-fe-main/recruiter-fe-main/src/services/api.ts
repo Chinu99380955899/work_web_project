@@ -175,6 +175,14 @@ export const uploadApi = {
     });
   },
 
+  uploadCandidateExcel: (file: File): Promise<ApiResponse> => {
+    const formData = new FormData();
+    formData.append("excel", file);
+    return api.post("/upload/candidate-excel", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+
   uploadBulkCandidates: (
     formData: FormData,
     onProgress?: (progress: number) => void

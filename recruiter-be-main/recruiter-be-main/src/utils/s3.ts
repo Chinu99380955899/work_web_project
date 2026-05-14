@@ -168,6 +168,48 @@ export const uploadCSV = async (
   }
 };
 
+// Upload an Excel file and return its URL
+export const uploadExcel = async (
+  file: Express.Multer.File,
+  folder: string = "excel"
+): Promise<string> => {
+  try {
+    if (!file) {
+      throw new ApiError(400, "No Excel file provided");
+    }
+
+    const allowedTypes = [
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new ApiError(400, "Invalid file type. Only .xls and .xlsx files are allowed.");
+    }
+
+    const timestamp = Date.now();
+    const sanitizedFileName = file.originalname
+      .replace(/\s+/g, "-")
+      .replace(/[()]/g, "")
+      .replace(/[^a-zA-Z0-9.-]/g, "_");
+
+    const uniqueFileName = `${folder}/${timestamp}-${sanitizedFileName}`;
+
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: uniqueFileName,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      ACL: "private",
+    };
+
+    const result = await s3.upload(params).promise();
+    return result.Location;
+  } catch (error: any) {
+    console.error("❌ S3 Excel upload error:", error);
+    throw new ApiError(500, "Failed to upload Excel file to S3");
+  }
+};
+
 // Upload a resume file and return its URL
 export const uploadResume = async (
   file: Express.Multer.File,

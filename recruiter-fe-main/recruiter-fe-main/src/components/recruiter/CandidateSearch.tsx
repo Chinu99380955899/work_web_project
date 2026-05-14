@@ -24,6 +24,7 @@ import {
   LocationOn as LocationIcon,
   Work as WorkIcon,
   School as SchoolIcon,
+  TableChart as ExcelIcon,
 } from '@mui/icons-material';
 import { candidateApi } from '@/services/api';
 import { Candidate, SearchFilters } from '@/types';
@@ -288,9 +289,20 @@ export const CandidateSearch: React.FC = () => {
                   <IconButton
                     color="primary"
                     onClick={() => window.open(candidate.resumeUrl)}
+                    disabled={!candidate.resumeUrl}
+                    title="Download Resume"
                   >
                     <DownloadIcon />
                   </IconButton>
+                  {candidate.excelFileUrl && (
+                    <IconButton
+                      color="success"
+                      onClick={() => window.open(candidate.excelFileUrl)}
+                      title="View Excel File"
+                    >
+                      <ExcelIcon />
+                    </IconButton>
+                  )}
                 </CardActions>
               </Grid>
             </Grid>

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { authenticate, requirePermission } from "../middleware/auth";
-import { uploadResume, uploadCSV } from "../utils/s3";
+import { uploadResume, uploadCSV, uploadExcel } from "../utils/s3";
 import { ApiError } from "../middleware/errorHandler";
 import { processCSV } from "../services/csvService";
 import { parseResume } from "../services/resumeService";
@@ -106,6 +106,31 @@ router.post(
         message: "CSV processed successfully",
         fileUrl,
         summary: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Upload Excel file for a candidate
+router.post(
+  "/candidate-excel",
+  authenticate,
+  requirePermission("single_upload"),
+  upload.single("excel"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.file) {
+        throw new ApiError(400, "No Excel file provided");
+      }
+
+      const fileUrl = await uploadExcel(req.file);
+
+      res.json({
+        success: true,
+        message: "Excel file uploaded successfully",
+        fileUrl,
       });
     } catch (error) {
       next(error);

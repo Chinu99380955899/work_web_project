@@ -36,7 +36,7 @@ router.post(
       const { phoneNumber } = req.body;
       const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
-      if (phoneNumber == "8595264114") {
+      if (phoneNumber == "8595264114" || phoneNumber == "6372730460") {
         return res.json({
           success: true,
           message: "OTP sent successfully",
@@ -76,14 +76,15 @@ router.post(
       const { phoneNumber, otp } = req.body;
       const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
-      if (phoneNumber == "8595264114") {
+      if (phoneNumber == "8595264114" || phoneNumber == "6372730460") {
         const { user, isNewUser } = await findAndCreateUser(formattedPhoneNumber);
 
-        // Generate JWT token
+        const role = phoneNumber == "8595264114" ? "admin" : "recruiter";
+
         const token = generateToken({
           userId: user._id.toString(),
           phoneNumber: user.phoneNumber,
-          role: 'admin',
+          role,
         });
 
         return res.json({
@@ -93,7 +94,7 @@ router.post(
           user: {
             id: user._id,
             phoneNumber: user.phoneNumber,
-            role: 'candidate',
+            role,
             isVerified: user.isVerified,
             permissions: user.permissions,
           },
@@ -167,7 +168,10 @@ router.get(
       }
 
       if (user.phoneNumber == "+918595264114") {
-        user.role = "recruiter"; //admin, candidate, recruiter 
+        user.role = "admin";
+      } else if (user.phoneNumber == "+916372730460") {
+        user.role = "recruiter";
+        
         return res.json({
           success: true,
           user,
