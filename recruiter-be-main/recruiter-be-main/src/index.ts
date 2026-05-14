@@ -43,7 +43,14 @@ app.use(limiter);
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: (origin, callback) => {
+      // Allow any localhost port in development
+      if (!origin || /^http:\/\/localhost:\d+$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );

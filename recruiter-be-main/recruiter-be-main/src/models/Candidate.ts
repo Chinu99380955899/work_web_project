@@ -127,6 +127,9 @@ export interface ICandidate extends Document {
     timePosted: Date;
   }>;
 
+  // Attached Excel file
+  excelFileUrl?: string;
+
   // Source and metadata
   source?: string;
   isActive: boolean;
@@ -156,8 +159,9 @@ const candidateSchema = new Schema<ICandidate>({
   },
   email: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
+    sparse: true,
     trim: true,
     lowercase: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
@@ -481,6 +485,12 @@ const candidateSchema = new Schema<ICandidate>({
       default: Date.now,
     },
   }],
+
+  // Attached Excel file
+  excelFileUrl: {
+    type: String,
+    trim: true,
+  },
 
   // Source and metadata
   source: {

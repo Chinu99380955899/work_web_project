@@ -111,6 +111,7 @@ export interface Candidate {
   dateOfBirth?: Date;
   permanentAddress?: string;
   resumeUrl?: string;
+  excelFileUrl?: string;
 
   // Workflow and tracking fields
   lastWorkflowActivity?: string;

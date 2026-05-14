@@ -94,6 +94,7 @@ const singleCandidateSchema = Yup.object({
   dateOfBirth: Yup.date(),
   permanentAddress: Yup.string(),
   resumeUrl: Yup.string(),
+  excelFileUrl: Yup.string(),
 });
 
 export const UploadPage: React.FC = () => {
@@ -102,6 +103,9 @@ export const UploadPage: React.FC = () => {
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isExcelUploading, setIsExcelUploading] = useState(false);
+  const [excelUploadSuccess, setExcelUploadSuccess] = useState<string | null>(null);
+  const [excelError, setExcelError] = useState<string | null>(null);
 
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -156,6 +160,7 @@ export const UploadPage: React.FC = () => {
       workPermitUSA: false,
       dateOfBirth: "",
       resumeUrl: "",
+      excelFileUrl: "",
       permanentAddress: "",
     },
     validationSchema: singleCandidateSchema,
@@ -406,6 +411,30 @@ export const UploadPage: React.FC = () => {
         setError(err.message || "Failed to upload resume");
       } finally {
         setIsUploading(false);
+      }
+    },
+  });
+
+  const { getRootProps: getExcelRootProps, getInputProps: getExcelInputProps } = useDropzone({
+    accept: {
+      "application/vnd.ms-excel": [".xls"],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+    },
+    maxFiles: 1,
+    onDrop: async (acceptedFiles) => {
+      if (!acceptedFiles.length) return;
+      try {
+        setExcelError(null);
+        setExcelUploadSuccess(null);
+        setIsExcelUploading(true);
+        const file = acceptedFiles[0];
+        const response = await uploadApi.uploadCandidateExcel(file);
+        singleForm.setFieldValue("excelFileUrl", response.data.fileUrl);
+        setExcelUploadSuccess(`Excel file uploaded: ${file.name}`);
+      } catch (err: any) {
+        setExcelError(err.message || "Failed to upload Excel file");
+      } finally {
+        setIsExcelUploading(false);
       }
     },
   });
@@ -1140,6 +1169,61 @@ export const UploadPage: React.FC = () => {
                     </>
                   )}
                 </Box>
+              </Grid>
+
+              {/* Excel File Upload */}
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                  Excel File (Optional)
+                </Typography>
+                <Box
+                  {...getExcelRootProps()}
+                  sx={{
+                    border: "2px dashed #ccc",
+                    borderRadius: 2,
+                    p: 3,
+                    textAlign: "center",
+                    cursor: isExcelUploading ? "not-allowed" : "pointer",
+                    opacity: isExcelUploading ? 0.6 : 1,
+                    "&:hover": {
+                      borderColor: isExcelUploading ? "#ccc" : "primary.main",
+                    },
+                  }}
+                >
+                  <input {...getExcelInputProps()} disabled={isExcelUploading} />
+                  {isExcelUploading ? (
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                      <CircularProgress size={24} />
+                      <Typography>Uploading Excel file...</Typography>
+                    </Box>
+                  ) : (
+                    <>
+                      <Typography>
+                        Drag and drop an Excel file here, or click to select
+                      </Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        Supported formats: XLS, XLSX
+                      </Typography>
+                      {singleForm.values.excelFileUrl && (
+                        <Box sx={{ mt: 2, p: 2, bgcolor: "success.light", borderRadius: 1 }}>
+                          <Typography variant="body2" color="success.contrastText">
+                            ✓ Excel file uploaded successfully
+                          </Typography>
+                        </Box>
+                      )}
+                    </>
+                  )}
+                </Box>
+                {excelUploadSuccess && (
+                  <Alert severity="success" sx={{ mt: 1 }} onClose={() => setExcelUploadSuccess(null)}>
+                    {excelUploadSuccess}
+                  </Alert>
+                )}
+                {excelError && (
+                  <Alert severity="error" sx={{ mt: 1 }} onClose={() => setExcelError(null)}>
+                    {excelError}
+                  </Alert>
+                )}
               </Grid>
 
               <Grid item xs={12}>

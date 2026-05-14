@@ -167,22 +167,10 @@ router.post(
       // Check for existing candidate by email or phone
       const existingCandidate = await Candidate.findOne({
         $or: [
-          { email: candidateData.email },
+          ...(candidateData.email ? [{ email: candidateData.email }] : []),
           { phoneNumber: candidateData.phoneNumber },
         ],
       });
-      //create user
-      const user = await User.create({
-        phoneNumber: candidateData.phoneNumber,
-        role: "candidate",
-        isVerified: true,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-
-      //update candidate with user id
-      candidateData.userId = user._id;
 
       if (existingCandidate) {
         throw new ApiError(
@@ -190,6 +178,20 @@ router.post(
           "Candidate already exists with this email or phone number"
         );
       }
+
+      // Find or create user for this phone number
+      let user = await User.findOne({ phoneNumber: candidateData.phoneNumber });
+      if (!user) {
+        user = await User.create({
+          phoneNumber: candidateData.phoneNumber,
+          role: "candidate",
+          isVerified: true,
+          isActive: true,
+        });
+      }
+
+      // update candidate with user id
+      candidateData.userId = user._id;
 
       // Create new candidate
       const candidate = await Candidate.create(candidateData);
@@ -310,7 +312,7 @@ router.get(
 
       const total = await Candidate.countDocuments(query);
 
-      // Generate signed URLs for resumes
+      // Generate signed URLs for resumes and excel files
       const candidatesWithSignedUrls = await Promise.all(
         candidates.map(async (candidate) => {
           const candidateObj = candidate.toObject();
@@ -319,10 +321,21 @@ router.get(
               candidateObj.resumeUrl = await getSignedUrl(
                 candidateObj.resumeUrl,
                 3600
-              ); // 1 hour expiry
+              );
             } catch (error) {
               console.error("Failed to generate signed URL for resume:", error);
               candidateObj.resumeUrl = undefined;
+            }
+          }
+          if (candidateObj.excelFileUrl) {
+            try {
+              candidateObj.excelFileUrl = await getSignedUrl(
+                candidateObj.excelFileUrl,
+                3600
+              );
+            } catch (error) {
+              console.error("Failed to generate signed URL for Excel file:", error);
+              candidateObj.excelFileUrl = undefined;
             }
           }
           return candidateObj;
@@ -462,14 +475,22 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 
     const candidateObj = candidate.toObject();
 
-    // ✅ Generate signed URL using your own `getSignedUrl()` util
     if (candidateObj.resumeUrl) {
       try {
         console.log("🟢 Generating signed resume URL for:", candidateObj.resumeUrl);
-        const signedUrl = await getSignedUrl(candidateObj.resumeUrl, 3600); // 1 hour expiry
+        const signedUrl = await getSignedUrl(candidateObj.resumeUrl, 3600);
         candidateObj.resumeUrl = signedUrl;
       } catch (err) {
         console.error("❌ Failed to sign resume URL:", err);
+      }
+    }
+
+    if (candidateObj.excelFileUrl) {
+      try {
+        const signedExcelUrl = await getSignedUrl(candidateObj.excelFileUrl, 3600);
+        candidateObj.excelFileUrl = signedExcelUrl;
+      } catch (err) {
+        console.error("❌ Failed to sign Excel URL:", err);
       }
     }
 
